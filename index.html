@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anatomie en jeu : Peau, Squelette & Cellule</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#1f2433;--muted:#667;--accent:#3b6cf6;--ok:#1f9d55;--ko:#d93a3a;--line:#dde1ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--card:#1e2230;--text:#eef0f7;--muted:#9aa2b8;--accent:#7a9bff;--ok:#4cc582;--ko:#ff6b6b;--line:#323850;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14171f;--card:#1e2230;--text:#eef0f7;--muted:#9aa2b8;--accent:#7a9bff;--ok:#4cc582;--ko:#ff6b6b;--line:#323850;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:8px 0 4px;text-align:center}
+.sub{text-align:center;color:var(--muted);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.cats{display:grid;gap:12px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.cat{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;width:100%}
+.cat .ic{font-size:2rem}
+.cat b{display:block;font-size:1.05rem}
+.cat .d{color:var(--muted);font-size:.85rem}
+.bar{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.prog{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:16px}
+.prog i{display:block;height:100%;background:var(--accent)}
+.tag{display:inline-block;font-size:.75rem;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:2px 10px;color:var(--muted);margin-bottom:8px}
+.q{font-size:1.15rem;font-weight:600;margin:0 0 14px;line-height:1.35}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.ok{border-color:var(--ok)!important;background:color-mix(in srgb,var(--ok) 15%,var(--card))!important}
+.ko{border-color:var(--ko)!important;background:color-mix(in srgb,var(--ko) 15%,var(--card))!important}
+.fb{margin-top:6px;padding:12px;border-radius:12px;background:var(--bg);font-size:.95rem;line-height:1.4}
+.primary{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 18px;width:100%;margin-top:12px;font-weight:600}
+.ghost{background:none;border:1px solid var(--line);border-radius:12px;padding:10px 16px;width:100%;margin-top:10px}
+input[type=text],select{width:100%;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px}
+.sv{width:100%;max-height:330px;background:var(--bg);border-radius:12px;margin-bottom:12px}
+.row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.row b{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.8rem;flex:none}
+.row select{padding:8px}
+.res{text-align:center}.big{font-size:3rem;margin:6px 0}
+.back{background:none;border:0;color:var(--muted);padding:0 0 10px}
+</style>
+</head>
+<body>
+<main>
+<h1>🧬 Anatomie en jeu</h1>
+<p class="sub">Peau · Squelette · Cellule</p>
+<div id="app"></div>
+</main>
+<script>
+const SK='<g fill="none" stroke="currentColor" stroke-width="3"><ellipse cx="100" cy="30" rx="22" ry="26"/><path d="M78 68H122" stroke-width="5"/><ellipse cx="100" cy="102" rx="32" ry="32"/><path d="M100 56V170" stroke-width="7" stroke-dasharray="3 2"/><ellipse cx="100" cy="180" rx="34" ry="14"/><g stroke-width="6" stroke-linecap="round"><path d="M68 72L46 140M132 72L154 140M85 190L80 245M115 190L120 245M80 250L80 295M120 250L120 295"/></g></g>';
+const CE='<ellipse cx="100" cy="100" rx="92" ry="72" fill="#fde8ee" stroke="#d6577a" stroke-width="3"/><circle cx="100" cy="100" r="24" fill="#cfd8ff" stroke="#4a5fd0" stroke-width="2"/><circle cx="104" cy="106" r="7" fill="#4a5fd0"/><ellipse cx="150" cy="72" rx="17" ry="8" fill="#ffd9a8" stroke="#e08a1e" stroke-width="2"/><path d="M40 125q18-8 36 0M42 133q18-8 36 0M44 141q18-8 36 0" stroke="#2e9d6b" stroke-width="3" fill="none"/><circle cx="70" cy="65" r="8" fill="#e6c3ff" stroke="#9b4dd6" stroke-width="2"/><g fill="#555"><circle cx="138" cy="128" r="3"/><circle cx="147" cy="133" r="3"/><circle cx="141" cy="138" r="3"/></g>';
+const PE='<rect y="0" width="200" height="25" fill="#f3b69a"/><rect y="25" width="200" height="70" fill="#e68f8f"/><rect y="95" width="200" height="45" fill="#f7e08a"/><path d="M60 80Q58 30 66 -25" stroke="#4a3426" stroke-width="3" fill="none"/><path d="M130 70V0" stroke="#2c7fb8" stroke-width="2" fill="none"/><circle cx="130" cy="78" r="9" fill="#9fd3f0" stroke="#2c7fb8" stroke-width="2"/><path d="M95 40V120" stroke="#b3202a" stroke-width="5" fill="none"/>';
+const DATA={
+peau:{nom:"La peau",ic:"🖐️",d:"Épiderme, derme, hypoderme…",
+qcm:[
+["Quelle est la couche la plus externe de la peau ?",["L’épiderme","Le derme","L’hypoderme","Le muscle"],0,"L’épiderme est la couche superficielle, qui se renouvelle en permanence."],
+["Quelle cellule produit la mélanine ?",["Le kératinocyte","Le mélanocyte","Le fibroblaste","Le globule blanc"],1,"Les mélanocytes fabriquent la mélanine, qui protège des UV."],
+["Quelle couche contient les vaisseaux, les nerfs et les glandes sudoripares ?",["L’épiderme","Le derme","L’hypoderme","La cornée"],1,"Le derme est un tissu conjonctif riche en vaisseaux et en récepteurs."],
+["Quelle protéine rend la peau résistante et imperméable ?",["L’hémoglobine","Le collagène","La kératine","L’insuline"],2,"La kératine forme aussi les cheveux et les ongles."],
+["Quel est le rôle principal de l’hypoderme ?",["Produire la mélanine","Isoler du froid et stocker la graisse","Faire pousser les poils","Protéger des UV"],1,"C’est la couche profonde : isolant, réserve d’énergie, amortisseur."],
+["À quoi sert la sueur ?",["À fabriquer de la vitamine C","À réguler la température","À colorer la peau","À fabriquer des os"],1,"En s’évaporant, la sueur refroidit le corps."],
+["Que produit la glande sébacée ?",["La sueur","Le sébum","La mélanine","Le sang"],1,"Le sébum graisse et protège la peau et les poils."],
+["Quel est le plus grand organe du corps ?",["Le foie","Le cerveau","La peau","L’intestin"],2,"La peau couvre environ 2 m² chez l’adulte."],
+["Que fabrique la peau exposée au soleil, utile pour les os ?",["La vitamine D","La vitamine C","Le calcium","Le fer"],0,"Les UV déclenchent la synthèse de vitamine D."]],
+court:[
+["Quel est le rôle de la peau ?","protege","La peau protège le corps contre les microbes, les UV, les chocs et la déshydratation."],
+["Pourquoi la peau devient-elle plus foncée au soleil ?","melanine","Les mélanocytes produisent plus de mélanine pour protéger les cellules des UV."],
+["Que fait le corps quand il a trop chaud ?","sue|sueur|transpir","Il transpire : la sueur s’évapore et refroidit la peau."],
+["À quoi servent les poils et les cheveux ?","proteg|isol|chaleur|froid","Ils protègent et isolent du froid."],
+["Quel sens est lié à la peau ?","toucher","La peau est l’organe du toucher grâce à ses récepteurs sensoriels."],
+["Que se passe-t-il quand on se coupe ?","coagul|cicatri|saign","Le sang coagule, puis la peau cicatrise."],
+["Dans quelle couche se trouve la graisse ?","hypoderme","C’est dans l’hypoderme, la couche la plus profonde."]],
+sch:{t:"Légende le schéma de la peau (coupe)",vb:"0 -30 200 200",svg:PE,pts:[[165,12,"Épiderme"],[165,60,"Derme"],[165,118,"Hypoderme"],[63,-12,"Poil"],[130,78,"Glande sudoripare"],[95,50,"Vaisseau sanguin"]]}},
+squelette:{nom:"Le squelette",ic:"🦴",d:"Os, articulations, moelle…",
+qcm:[
+["Combien d’os compte le squelette d’un adulte ?",["106","206","306","406"],1,"Un adulte a 206 os ; un bébé en a plus, car certains se soudent."],
+["Quel est l’os le plus long du corps ?",["Le tibia","L’humérus","Le fémur","Le radius"],2,"Le fémur, dans la cuisse, est aussi le plus solide."],
+["Quels os protègent le cerveau ?",["Les côtes","Les os du crâne","Les vertèbres","Le sternum"],1,"Le crâne forme la boîte crânienne."],
+["Où fabrique-t-on les globules rouges ?",["Dans le foie","Dans la moelle osseuse rouge","Dans le cœur","Dans les poumons"],1,"La moelle osseuse rouge produit les cellules du sang."],
+["Que protègent les côtes ?",["Le cerveau","L’estomac seulement","Le cœur et les poumons","La moelle épinière"],2,"La cage thoracique protège le cœur et les poumons."],
+["Comment s’appelle l’articulation du coude ?",["Une rotule","Une charnière","Une articulation fixe","Une sphère"],1,"Le coude fonctionne comme une charnière de porte."],
+["Qu’est-ce qui relie un os à un autre os ?",["Le tendon","Le ligament","Le nerf","La veine"],1,"Ligament : os-os. Tendon : muscle-os."],
+["Comment s’appellent les os de la colonne vertébrale ?",["Les phalanges","Les vertèbres","Les côtes","Les carpes"],1,"Les vertèbres protègent la moelle épinière."],
+["Comment appelle-t-on un os cassé ?",["Une entorse","Une fracture","Une luxation","Une tendinite"],1,"Entorse = ligament ; luxation = articulation déboîtée."],
+["Quel minéral durcit les os ?",["Le sodium","Le calcium","Le fer","Le potassium"],1,"Le calcium et le phosphore donnent aux os leur dureté."]],
+court:[
+["Cite un rôle du squelette.","soutien|soutient|soutenir|proteg|mouvement|bouger|sang","Il soutient le corps, protège les organes, permet le mouvement et fabrique les cellules du sang."],
+["Comment appelle-t-on la jonction entre deux os ?","articulation","C’est une articulation."],
+["Où naissent les cellules du sang ?","moelle","Dans la moelle osseuse rouge."],
+["Quel os protège la moelle épinière ?","vertebr|colonne","La colonne vertébrale, formée de vertèbres."],
+["Comment se nomme l’os du bras entre l’épaule et le coude ?","humerus","C’est l’humérus."],
+["Que font les muscles sur les os ?","mouv|bouge|tire|contract","Ils se contractent et tirent sur les os pour provoquer le mouvement."],
+["Pourquoi le calcium est-il important pour les os ?","dur|solid|resist|fort","Il rend les os durs et solides."]],
+sch:{t:"Légende le schéma du squelette",vb:"0 0 200 300",svg:SK,pts:[[100,28,"Crâne"],[78,68,"Clavicule"],[122,102,"Côtes"],[46,110,"Humérus"],[100,150,"Colonne vertébrale"],[100,180,"Bassin"],[82,218,"Fémur"],[80,272,"Tibia"]]}},
+cellule:{nom:"La cellule",ic:"🔬",d:"Noyau, mitochondries, membrane…",
+qcm:[
+["Quel organite contient l’ADN ?",["Le noyau","Le ribosome","La vacuole","Le lysosome"],0,"Le noyau renferme l’information génétique."],
+["Quel organite est la « centrale énergétique » ?",["Le noyau","L’appareil de Golgi","La mitochondrie","Le chloroplaste"],2,"Les mitochondries produisent l’énergie (ATP)."],
+["Quels organites fabriquent les protéines ?",["Les ribosomes","Les mitochondries","Les lysosomes","Les chloroplastes"],0,"Les ribosomes assemblent les acides aminés."],
+["Quelle structure entoure la cellule et contrôle les échanges ?",["La paroi","La membrane plasmique","Le cytosquelette","Le nucléole"],1,"La membrane plasmique est sélective."],
+["Quel organite, propre aux végétaux, permet la photosynthèse ?",["Le chloroplaste","La mitochondrie","Le noyau","Le lysosome"],0,"Les chloroplastes contiennent la chlorophylle."],
+["Comment appelle-t-on le liquide qui remplit la cellule ?",["Le plasma","Le cytoplasme","Le sérum","La lymphe"],1,"Le cytoplasme contient les organites."],
+["Quel organite digère les déchets de la cellule ?",["Le lysosome","Le ribosome","Le noyau","Le chloroplaste"],0,"Les lysosomes contiennent des enzymes digestives."],
+["Quel est le rôle de l’appareil de Golgi ?",["Produire l’énergie","Trier et emballer les protéines","Contenir l’ADN","Capter la lumière"],1,"Le Golgi modifie et expédie les protéines."],
+["De quoi tous les êtres vivants sont-ils faits ?",["D’atomes seulement","De cellules","De minéraux","D’eau pure"],1,"La cellule est l’unité de base du vivant."],
+["Quelle cellule mature n’a pas de noyau ?",["Le neurone","Le globule rouge","La cellule musculaire","La cellule de peau"],1,"Le globule rouge perd son noyau pour transporter plus d’oxygène."]],
+court:[
+["Quel est le rôle du noyau ?","adn|information|genetique|commande|controle","Il contient l’ADN et commande les activités de la cellule."],
+["Que produit la mitochondrie ?","energie|atp","Elle produit de l’énergie pour la cellule."],
+["Quelle différence y a-t-il entre cellule animale et végétale ?","paroi|chloroplaste","La cellule végétale a une paroi et des chloroplastes, pas la cellule animale."],
+["Quel est le rôle de la membrane ?","echange|selectiv|entre|sort|passe|protege|delimite","Elle délimite la cellule et contrôle ce qui entre et sort."],
+["Que veut dire « photosynthèse » ?","lumiere|soleil","Les plantes utilisent la lumière pour fabriquer des sucres à partir de CO₂ et d’eau."],
+["Que fabriquent les ribosomes ?","proteine","Ils fabriquent des protéines."],
+["Quelle est l’unité de base du vivant ?","cellule","C’est la cellule."]],
+sch:{t:"Légende le schéma de la cellule animale",vb:"0 0 200 200",svg:CE,pts:[[190,100,"Membrane"],[90,92,"Noyau"],[150,72,"Mitochondrie"],[58,130,"Appareil de Golgi"],[70,65,"Lysosome"],[142,131,"Ribosomes"],[110,165,"Cytoplasme"]]}}
+};
+const app=document.getElementById("app");
+const N=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let S;
+function home(){
+ app.innerHTML='<div class="cats">'+Object.entries(DATA).map(([k,v])=>`<button class="cat" onclick="modes('${k}')"><span class="ic">${v.ic}</span><div><b>${v.nom}</b><span class="d">${v.d}<br>${v.qcm.length} QCM · schéma · ${v.court.length} réponses courtes</span></div></button>`).join("")+
+ `<button class="cat" onclick="start(Object.keys(DATA),'mix')"><span class="ic">🎲</span><div><b>Grand défi</b><span class="d">Tous les thèmes et tous les types</span></div></button></div>`;
+}
+function modes(k){
+ app.innerHTML=`<button class="back" onclick="home()">← Thèmes</button><div class="cats">
+ <button class="cat" onclick="start(['${k}'],'q')"><span class="ic">✅</span><div><b>QCM</b><span class="d">Choisis la bonne réponse</span></div></button>
+ <button class="cat" onclick="start(['${k}'],'s')"><span class="ic">🏷️</span><div><b>Schéma à légender</b><span class="d">Place les bons noms</span></div></button>
+ <button class="cat" onclick="start(['${k}'],'c')"><span class="ic">✍️</span><div><b>Réponses courtes</b><span class="d">Réponds avec une petite phrase</span></div></button>
+ <button class="cat" onclick="start(['${k}'],'mix')"><span class="ic">🎲</span><div><b>Mélange</b><span class="d">Un peu de tout</span></div></button></div>`;
+}
+function start(keys,m){
+ let it=[],one=keys.length===1;
+ keys.forEach(k=>{const d=DATA[k];
+  if(m==="q")it.push(...sh(d.qcm).map(x=>({k:"q",x})));
+  if(m==="c")it.push(...sh(d.court).map(x=>({k:"c",x})));
+  if(m==="s"||m==="mix")it.push({k:"s",x:d.sch});
+  if(m==="mix"){it.push(...sh(d.qcm).slice(0,one?5:3).map(x=>({k:"q",x})));it.push(...sh(d.court).slice(0,one?4:2).map(x=>({k:"c",x})))}
+ });
+ it=m==="s"?it:sh(it);
+ S={keys,m,it,i:0,sc:0,tot:it.reduce((a,b)=>a+(b.k==="s"?b.x.pts.length:1),0),st:0,best:0};
+ show();
+}
+const head=t=>`<div class="bar"><span>${S.i+1}/${S.it.length}</span><span>⭐ ${S.sc} · 🔥 ${S.st}</span></div><div class="prog"><i style="width:${S.i/S.it.length*100}%"></i></div><span class="tag">${t}</span>`;
+function show(){
+ const it=S.it[S.i];
+ if(it.k==="q"){const o=sh(it.x[1].map((x,i)=>({x,c:i===it.x[2]})));it.o=o;
+  app.innerHTML=`<div class="card">${head("QCM")}<p class="q">${it.x[0]}</p>${o.map((a,i)=>`<button class="opt" onclick="pickQ(${i})">${a.x}</button>`).join("")}<div id="fb"></div></div>`}
+ else if(it.k==="c"){
+  app.innerHTML=`<div class="card">${head("Réponse courte")}<p class="q">${it.x[0]}</p><input type="text" id="ans" placeholder="Écris une petite phrase…" autocomplete="off" onkeydown="if(event.key==='Enter')checkC()"><div id="fb"><button class="primary" onclick="checkC()">Valider</button></div></div>`}
+ else{const d=it.x,L=sh([...new Set(d.pts.map(p=>p[2]))]);
+  const mk=d.pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="9" style="fill:var(--accent)"/><text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">${i+1}</text>`).join("");
+  app.innerHTML=`<div class="card">${head("Schéma")}<p class="q">${d.t}</p><svg class="sv" viewBox="${d.vb}" style="color:var(--text)">${d.svg}${mk}</svg>${d.pts.map((p,i)=>`<div class="row"><b>${i+1}</b><select id="s${i}"><option value="">Choisir…</option>${L.map(l=>`<option>${l}</option>`).join("")}</select></div>`).join("")}<div id="fb"><button class="primary" onclick="checkS()">Vérifier</button></div></div>`}
+}
+function res(good){if(good){S.sc++;S.st++;S.best=Math.max(S.best,S.st)}else S.st=0}
+const nxt=()=>`<button class="primary" onclick="next()">${S.i===S.it.length-1?"Voir mon résultat":"Suivant →"}</button>`;
+function pickQ(i){const it=S.it[S.i],b=[...document.querySelectorAll(".opt")];
+ b.forEach((x,j)=>{x.disabled=true;if(it.o[j].c)x.classList.add("ok")});
+ const g=it.o[i].c;if(!g)b[i].classList.add("ko");res(g);
+ document.getElementById("fb").innerHTML=`<div class="fb">${g?"✅ <b>Bravo !</b>":"❌ <b>Pas tout à fait.</b>"} ${it.x[3]}</div>`+nxt()}
+function checkC(){const it=S.it[S.i],inp=document.getElementById("ans"),v=N(inp.value);if(!v.trim())return;
+ const g=it.x[1].split("&").every(gr=>gr.split("|").some(w=>v.includes(w)));inp.disabled=true;
+ if(g)res(true);else S.st=0;
+ document.getElementById("fb").innerHTML=`<div class="fb">${g?"✅ <b>Bravo !</b>":"❌ <b>Compare avec la réponse modèle.</b>"}<br>💬 ${it.x[2]}</div>`+(g?"":`<button class="ghost" id="ok" onclick="S.sc++;S.st++;this.remove();document.querySelector('.bar span:last-child').textContent='⭐ '+S.sc+' · 🔥 '+S.st">J’avais bon aussi ✔</button>`)+nxt()}
+function checkS(){const d=S.it[S.i].x;let n=0;
+ d.pts.forEach((p,i)=>{const s=document.getElementById("s"+i),g=s.value===p[2];s.disabled=true;s.classList.add(g?"ok":"ko");if(g)n++;else s.insertAdjacentHTML("afterend",`<span style="font-size:.8rem;margin-left:6px">→ ${p[2]}</span>`)});
+ S.sc+=n;if(n===d.pts.length){S.st++;S.best=Math.max(S.best,S.st)}else S.st=0;
+ document.getElementById("fb").innerHTML=`<div class="fb">🏷️ <b>${n} / ${d.pts.length}</b> bonnes légendes.</div>`+nxt()}
+function next(){S.i++;S.i>=S.it.length?end():show()}
+function end(){const p=S.sc/S.tot;
+ const [em,msg]=p>=.95?["🏆","Parfait ! Tu es un(e) expert(e) !"]:p>=.7?["🎉","Très bien joué !"]:p>=.4?["👍","Pas mal, continue à réviser !"]:["📚","Courage, réessaie, tu vas y arriver !"];
+ app.innerHTML=`<div class="card res"><div class="big">${em}</div><h2>${S.sc} / ${S.tot}</h2><p>${msg}</p><p style="color:var(--muted)">Meilleure série : 🔥 ${S.best}</p><button class="primary" onclick="start(S.keys,S.m)">Rejouer</button><button class="ghost" onclick="home()">Changer de thème</button></div>`}
+home();
+</script>
+</body>
+</html>
